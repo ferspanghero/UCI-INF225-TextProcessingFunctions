@@ -1,0 +1,81 @@
+I was coaching a number of teams and their Sprint Reviews were boring status meetings and few stakeholders attended. I see this pattern often at companies and a reason for poor stakeholder attendance is that the discussion about added value happens in other meetings. In this post I want to share a little model that is based on Impact Mapping[1] and Value Requirements[2] that I use to improve team’s focus on value.
+
+Value Driven Development
+Delivering value has always been the priority of agile teams. One of the principles of the agile manifesto emphasises this focus:
+
+“Our highest priority is to satisfy the customer? through early and continuous delivery? of valuable software”.
+
+This principle sets the focus on delivering value to customers. Value from the customer’s point of view is the benefit they think they will get from using a product or a service. The focus on customer value has led some to measure and track value delivered with user stories.
+
+Customer value is not enough
+User stories are great for many reasons, but a user story is focused on customer value as you can see in the quote below.
+
+“A user story describes functionality that will be valuable to either a user or purchaser of a system or software”
+
+source: User Stories Applied, Mike Cohn, 2004
+
+If your Sprint Reviews have a lack of stakeholders, maybe it is because you are having the wrong discussions. If your Sprint Review is a demo and only discusses how many user stories were delivered you might have found the problem. The discussion at the Sprint Review should be about “how much value we created?” and “what is preventing us from shipping today?”. It should address the value of all stakeholders not just the customer’s value.
+
+A Product Owner may have the following value questions:
+
+Are we solving the right problem?
+Are we building the right solution for that problem?
+Are customers willing to pay for it?
+Can I make money developing it?
+For a customer, value questions could be:
+
+Does it solve a problem I know I have in a better way then my current solution?
+Does it solve a problem that I didn’t know I had?
+Am I willing to use it?
+Am I willing to pay for it?
+A stakeholder could be interested in:
+
+Am I making the right investment?
+Am I reaching my stakeholder objectives?
+Answering all these questions by measuring value points on user stories can be challenging. It can work if you are developing a mobile-app, but it becomes harder when you are developing an internal system for supporting a new business process.
+
+Define value for all stakeholders
+In order to satisfy different stakeholders and steer development you need another definition of value and progress. Different stakeholders seek different values There are various levels of outcomes and outputs; I like to discriminate between three levels:
+
+The team level
+The product level
+The business level.
+Value at the team level
+
+I like to see outputs at the team level as potential solutions[2] a.k.a. product increments. The outcomes at the team level are its potential impact on product quality. These are product qualities like usability, costs, maintainability, performance and so on.
+
+Value at the product level
+
+At the product level, the quality of the product are merely outputs of a team. Outcomes at the product level are customer behaviour and stakeholder values or happy customers and happy stakeholders.
+
+Value at the business level
+
+At the business level, the happy customers and happy stakeholders are merely outputs of the product. The outcome at the business level would be increased revenue or increased employee satisfaction for example.
+
+In the graphic below you see the three levels and their relationship on outputs and outcomes.
+
+outputs-outcomes-levels-small22
+
+The good part of all of this is that you can measure and receive feedback at these three levels and are therefore able to learn more from your development experiments.
+
+A simple Example
+Let’s say you are an airline company and your business objective is to make more money by increasing ticket sales in the current customer base. The expected outcome at the business level is a 20% increase in revenue and of course happy customers and stakeholders. It is decided that one way to contribute to the 20% increase in revenue, is to increase in the sales under frequent flyers from 10M to 12M. At the business level, we end up with an expected outcome of 20% increase in revenue under existing customers and an output of 1M increase in frequent flyer tickets sales.
+
+businesslevelsmall2
+
+At the product level the 1M increase in frequent flyer sales is one of the outcomes. Another outcome is happy customers, in this case frequent flyers. In order to have happy frequent flyers it is decided to increase the ease of rebooking. So, at the product level we have as outcome a 1M increase in frequent flyer sales and as output we have an increase in ease of rebooking.
+
+productlevelsmall2
+
+Finally we arrive at the team level. The outcome of delivering an increment is to increase the easy of rebooking. The product quality we are talking about here is Usability. The output is the potential solution ‘Auto-rebooking’ functionality to increase the ease of rebooking.
+
+teamlevelsmall2
+
+You now have linked the experiment of developing ‘auto rebooking’ to the expected business outcome of 20% increase in revenue. All you need to do now is quantify all the outcomes. At the Sprint Review you can discuss how much product value you added by measuring Usability. You can also measure, after shipping your Increment, if an increase in Usability results in an increase of frequent flyer sales and if the business objective is significantly impacted.
+
+You can now measure progress towards different stakeholder values and have informed discussions in your Sprint Reviews about them.
+
+References
+[1] Impact Mapping: Making a big impact with software products and projects by Gojko Adzic
+
+[2] Competitive Engineering: A Handbook For Systems Engineering, Requirements Engineering, and Software Engineering Using Planguage – June 25, 2005 by Tom Gilb (Author)
