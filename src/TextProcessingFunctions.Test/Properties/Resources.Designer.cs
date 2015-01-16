@@ -61,6 +61,139 @@ namespace TextProcessingFunctions.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to i
+        ///was
+        ///coaching
+        ///a
+        ///number
+        ///of
+        ///teams
+        ///and
+        ///their
+        ///sprint
+        ///reviews
+        ///were
+        ///boring
+        ///status
+        ///meetings
+        ///few
+        ///stakeholders
+        ///attended
+        ///see
+        ///this
+        ///pattern
+        ///often
+        ///at
+        ///companies
+        ///reason
+        ///for
+        ///poor
+        ///stakeholder
+        ///attendance
+        ///is
+        ///that
+        ///the
+        ///discussion
+        ///about
+        ///added
+        ///value
+        ///happens
+        ///in
+        ///other
+        ///post
+        ///want
+        ///to
+        ///share
+        ///little
+        ///model
+        ///based
+        ///on
+        ///impact
+        ///mapping
+        ///1
+        ///requirements
+        ///2
+        ///use
+        ///improve
+        ///team
+        ///s
+        ///focus
+        ///driven
+        ///development
+        ///delivering
+        ///has
+        ///always
+        ///been
+        ///priority
+        ///agile
+        ///one
+        ///principles
+        ///manifesto
+        ///emphasises
+        ///our [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFile_ExpectedTokens {
+            get {
+                return ResourceManager.GetString("TestFile_ExpectedTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the - 64
+        ///of - 28
+        ///and - 28
+        ///a - 27
+        ///to - 24
+        ///value - 23
+        ///is - 22
+        ///in - 22
+        ///at - 18
+        ///level - 17
+        ///are - 16
+        ///i - 15
+        ///product - 15
+        ///you - 15
+        ///increase - 14
+        ///it - 12
+        ///for - 10
+        ///business - 10
+        ///stakeholders - 9
+        ///on - 9
+        ///customer - 9
+        ///have - 9
+        ///that - 8
+        ///user - 8
+        ///can - 8
+        ///we - 8
+        ///an - 8
+        ///team - 7
+        ///customers - 7
+        ///outcomes - 7
+        ///happy - 7
+        ///outcome - 7
+        ///frequent - 7
+        ///sprint - 6
+        ///this - 6
+        ///be - 6
+        ///your - 6
+        ///all - 6
+        ///outputs - 6
+        ///sales - 6
+        ///rebooking - 6
+        ///stakeholder - 5
+        ///from - 5
+        ///or - 5
+        ///stories - 5
+        ///if - 5
+        ///problem  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFile_ExpectedWordFrequencies {
+            get {
+                return ResourceManager.GetString("TestFile_ExpectedWordFrequencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I was coaching a number of teams and their Sprint Reviews were boring status meetings and few stakeholders attended. I see this pattern often at companies and a reason for poor stakeholder attendance is that the discussion about added value happens in other meetings. In this post I want to share a little model that is based on Impact Mapping[1] and Value Requirements[2] that I use to improve team’s focus on value.
         ///
         ///Value Driven Development

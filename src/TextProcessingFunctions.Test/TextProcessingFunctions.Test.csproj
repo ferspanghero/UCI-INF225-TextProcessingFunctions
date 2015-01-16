@@ -84,6 +84,12 @@
   <ItemGroup>
     <None Include="Resources\TestFile.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TestFile_ExpectedWordFrequencies.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TestFile_ExpectedTokens.txt" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

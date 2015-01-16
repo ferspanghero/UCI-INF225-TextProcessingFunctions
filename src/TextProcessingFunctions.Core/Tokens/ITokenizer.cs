@@ -9,5 +9,6 @@ namespace TextProcessingFunctions.Core.Tokens
     public interface ITokenizer
     {
         IEnumerable<Token> Tokenize();
+        IEnumerable<KeyValuePair<string, int>> ComputeWordFrequencies();
     }
 }

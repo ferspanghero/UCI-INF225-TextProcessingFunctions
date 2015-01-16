@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TextProcessingFunctions.Core.Properties;
 
 namespace TextProcessingFunctions.Core.Tokens
-{
+{    
     public class TextFileTokenizer : ITokenizer
     {
         #region Constructors
@@ -18,7 +18,7 @@ namespace TextProcessingFunctions.Core.Tokens
                 throw new ArgumentException(Resources.ArgumentException_InvalidTextFilePathMessage);
 
             this._filePath = filePath;
-        } 
+        }
         #endregion
 
         #region Properties
@@ -26,6 +26,38 @@ namespace TextProcessingFunctions.Core.Tokens
         #endregion
 
         #region Methods
+        private void _AddToken(HashSet<Token> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
+        {
+            // Converts the buffer into a lowercase string
+            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();
+            Token token = new Token(word);
+
+            // If it tries to add a token that already exists, HashSet<T> automatically discards it
+            tokens.Add(token);
+
+            // Resets word buffer
+            wordBuffer = new char[bufferSize];
+            wordBufferCount = 0;
+        }
+
+        private void _AddWordFrequency(Dictionary<string, int> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
+        {
+            // Converts the buffer into a lowercase string
+            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();
+
+            // If it tries to add a token that already exists, we should increment the existing token frequency number instead
+            if (tokens.ContainsKey(word))
+                tokens[word]++;
+            else
+                tokens.Add(word, 1);
+
+            // Resets word buffer
+            wordBuffer = new char[bufferSize];
+            wordBufferCount = 0;
+        }
+        #endregion
+
+        #region ITokenizer Implementation
         public IEnumerable<Token> Tokenize()
         {
             // Considering tokens are always unique, a HashSet<T> will always provide 
@@ -47,9 +79,9 @@ namespace TextProcessingFunctions.Core.Tokens
                 while (!reader.EndOfStream)
                 {
                     charactersReadCount = reader.Read(buffer, textFileStreamCurrentPosition, bufferSize);
-                    
+
                     if (buffer != null && charactersReadCount > 0)
-                    {                        
+                    {
                         // Only considers the number of characters read since it can be smaller than the buffer itself
                         for (int i = 0; i < charactersReadCount; i++)
                         {
@@ -75,21 +107,55 @@ namespace TextProcessingFunctions.Core.Tokens
                 tokens;
         }
 
-        #region Auxiliar
-        private static void _AddToken(HashSet<Token> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
+        public IEnumerable<KeyValuePair<string, int>> ComputeWordFrequencies()
         {
-            // Converts the buffer into a lowercase string
-            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();
-            Token token = new Token(word);
+            // Considering tokens are always unique, a Dictionary<TKey, TValue> will always provide 
+            // a O(1) time complexity if it is necessary to search for a particular token
+            Dictionary<string, int> tokens = new Dictionary<string, int>();
 
-            // If it tries to add a token that already exists, HashSet<T> automatically discards it
-            tokens.Add(token);
+            if (!File.Exists(_filePath))
+                throw new ArgumentException(Resources.ArgumentException_NonExistingTextFileMessage);
 
-            // Resets word buffer
-            wordBuffer = new char[bufferSize];
-            wordBufferCount = 0;
-        }  
-        #endregion
+            using (StreamReader reader = File.OpenText(_filePath))
+            {
+                int bufferSize = 1024;
+                int charactersReadCount = 0;
+                int textFileStreamCurrentPosition = 0;
+                char[] buffer = new char[bufferSize];
+                char[] wordBuffer = new char[bufferSize];
+                int wordBufferCount = 0;
+
+                while (!reader.EndOfStream)
+                {
+                    charactersReadCount = reader.Read(buffer, textFileStreamCurrentPosition, bufferSize);
+
+                    if (buffer != null && charactersReadCount > 0)
+                    {
+                        // Only considers the number of characters read since it can be smaller than the buffer itself
+                        for (int i = 0; i < charactersReadCount; i++)
+                        {
+                            // Only considers alphanumerical characters as valid for words
+                            if (char.IsLetterOrDigit(buffer[i]))
+                            {
+                                wordBuffer[wordBufferCount++] = buffer[i];
+
+                                // If it reads the last character of the file and it is alphanumerical, then we have a word
+                                if (i == charactersReadCount - 1 && reader.EndOfStream)
+                                    _AddWordFrequency(tokens, bufferSize, ref wordBuffer, ref wordBufferCount);
+                            }
+
+                            // If it hits a non-alphanumerical character and the word buffer is not empty, then we have a word
+                            else if (wordBufferCount > 0)
+                                _AddWordFrequency(tokens, bufferSize, ref wordBuffer, ref wordBufferCount);
+                        }
+                    }
+                }
+            }
+
+            // Returns the tokens ordered by decreasing frequency
+            return
+                tokens.OrderByDescending(pair => pair.Value);
+        }
         #endregion
     }
 }

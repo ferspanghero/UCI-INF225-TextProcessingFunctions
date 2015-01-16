@@ -42,13 +42,41 @@ namespace TextProcessingFunctions.Test.Tokens
             // Arrange           
             ITokenizer tokenizer = new TextFileTokenizer(_CreateTextFile());
             IEnumerable<Token> tokens;
+            IEnumerable<Token> expectedTokens = _RetrieveExpectedTokens();
 
             // Act
             tokens = tokenizer.Tokenize();
 
             // Assert
-            tokens.Should().NotBeNullOrEmpty();
-        }        
+            tokens.Should().BeEquivalentTo(expectedTokens);
+        }
+
+        [TestMethod]
+        public void TextFileTokenizer_ComputeWordFrequencies_NonExistingTestFileTest()
+        {
+            // Arrange
+            string invalidTextFile = "nonExistingFile.txt";
+            ITokenizer tokenizer = new TextFileTokenizer(invalidTextFile);
+            Action action = () => tokenizer.ComputeWordFrequencies();
+
+            // Act/Assert
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void TextFileTokenizer_ComputeWordFrequencies_ValidTextFileTest()
+        {
+            // Arrange           
+            ITokenizer tokenizer = new TextFileTokenizer(_CreateTextFile());
+            IEnumerable<KeyValuePair<string, int>> wordFrequencies;
+            IEnumerable<KeyValuePair<string, int>> expectedWordFrequencies = _RetrieveExpectedWordFrequencies();
+
+            // Act
+            wordFrequencies = tokenizer.ComputeWordFrequencies();
+
+            // Assert
+            wordFrequencies.Should().BeEquivalentTo(expectedWordFrequencies);
+        }               
         #endregion
 
         #region Auxiliar
@@ -68,6 +96,56 @@ namespace TextProcessingFunctions.Test.Tokens
             return
                 path;
         }
+
+        private IEnumerable<Token> _RetrieveExpectedTokens()
+        {
+            HashSet<Token> tokens = new HashSet<Token>();
+            string line;
+
+            using (StringReader reader = new StringReader(Resources.TestFile_ExpectedTokens))
+            {
+                do
+                {
+                    line = reader.ReadLine();
+
+                    if (line != null)
+                        tokens.Add(new Token(line));
+
+                } while (line != null);
+            }
+
+            return
+                tokens;
+        }  
+
+        private IEnumerable<KeyValuePair<string, int>> _RetrieveExpectedWordFrequencies()
+        {
+            Dictionary<string, int> wordFrequencies = new Dictionary<string, int>();
+            string line;
+
+            using (StringReader reader = new StringReader(Resources.TestFile_ExpectedWordFrequencies))
+            {
+                do
+                {
+                    line = reader.ReadLine();
+
+                    if (line != null)
+                    {
+                        string[] wordData = line.Split('-');
+
+                        wordFrequencies.Add
+                        (
+                            wordData[0].Trim(), 
+                            int.Parse(wordData[1].Trim())
+                        );
+                    }
+
+                } while (line != null);                
+            }
+
+            return
+                wordFrequencies;
+        } 
         #endregion
     }
 }
