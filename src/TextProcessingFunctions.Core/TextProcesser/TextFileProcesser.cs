@@ -118,8 +118,31 @@ namespace TextProcessingFunctions.Core.TextProcesser
             }
 
             return
-                wordFrequencies;
+                wordFrequencies.OrderByDescending(wordFrequency => wordFrequency.Value);
         }
-        #endregion
+
+        public IEnumerable<KeyValuePair<TwoGram, int>> ComputeTwoGramFrequencies()
+        {
+            Dictionary<TwoGram, int> twoGramFrequencies = new Dictionary<TwoGram, int>();
+            TwoGram twoGram = null;
+
+            // If there are no processed tokens, try to tokenize the input text file
+            if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
+                Tokenize();
+
+            for (int i = 0; i < _indistinctTokenList.Count - 1; i++)
+            {
+                twoGram = new TwoGram(_indistinctTokenList[i], _indistinctTokenList[i + 1]);
+
+                if (twoGramFrequencies.ContainsKey(twoGram))
+                    twoGramFrequencies[twoGram]++;
+                else
+                    twoGramFrequencies.Add(twoGram, 1);
+            }
+
+            return 
+                twoGramFrequencies.OrderByDescending(twoGramFrequency => twoGramFrequency.Value);
+        }
+        #endregion        
     }
 }

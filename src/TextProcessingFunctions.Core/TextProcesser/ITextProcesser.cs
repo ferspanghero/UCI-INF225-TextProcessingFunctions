@@ -20,5 +20,10 @@ namespace TextProcessingFunctions.Core.TextProcesser
         /// Calculates a text input words frequencies
         /// </summary>
         IEnumerable<KeyValuePair<Token, int>> ComputeWordFrequencies();
+
+        /// <summary>
+        /// Calculates a text input 2-grams frequencies
+        /// </summary>
+        IEnumerable<KeyValuePair<TwoGram, int>> ComputeTwoGramFrequencies();
     }
 }

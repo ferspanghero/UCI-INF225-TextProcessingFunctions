@@ -139,6 +139,15 @@ namespace TextProcessingFunctions.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string TestFile_ExpectedTwoGramFrequencies {
+            get {
+                return ResourceManager.GetString("TestFile_ExpectedTwoGramFrequencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the - 64
         ///of - 28
         ///and - 28

@@ -27,7 +27,8 @@ namespace TextProcessingFunctions
             {
                 Console.WriteLine("Press 1 to tokenize");
                 Console.WriteLine("Press 2 to calculate word frequencies");
-                Console.WriteLine("Press 3 to exit");
+                Console.WriteLine("Press 3 to calculate 2-gram frequencies");
+                Console.WriteLine("Press 0 to exit");
 
                 int.TryParse(Console.ReadLine(), out option);
 
@@ -35,10 +36,12 @@ namespace TextProcessingFunctions
                     _MeasureTime(() => _PrintTokens(tokenizer));
                 else if (option == 2)
                     _MeasureTime(() => _PrintWordFrequencies(tokenizer));
+                else if (option == 3)
+                    _MeasureTime(() => _PrintTwoGramFrequencies(tokenizer));
 
                 Console.WriteLine();
 
-            } while (option != 3);
+            } while (option != 0);
         }
 
         private static void _MeasureTime(Action action)
@@ -70,6 +73,14 @@ namespace TextProcessingFunctions
             var wordFrequencies = tokenizer.ComputeWordFrequencies();
 
             foreach (var pair in wordFrequencies)
+                Console.WriteLine(pair.Key + " - " + pair.Value);
+        }
+
+        private static void _PrintTwoGramFrequencies(ITextProcesser tokenizer)
+        {
+            var twoGramFrequencies = tokenizer.ComputeTwoGramFrequencies();
+
+            foreach (var pair in twoGramFrequencies)
                 Console.WriteLine(pair.Key + " - " + pair.Value);
         }
     }

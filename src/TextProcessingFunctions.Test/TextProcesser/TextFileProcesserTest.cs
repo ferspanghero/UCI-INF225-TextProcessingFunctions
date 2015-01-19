@@ -47,7 +47,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
             // Act
             tokens = tokenizer.Tokenize();
 
-            // Assert
+            // Assert            
             tokens.Should().BeEquivalentTo(expectedTokens);
         }
 
@@ -75,8 +75,39 @@ namespace TextProcessingFunctions.Test.TextProcesser
             wordFrequencies = tokenizer.ComputeWordFrequencies();
 
             // Assert
+            wordFrequencies.Should().BeInDescendingOrder(wordFrequency => wordFrequency.Value);
+            expectedWordFrequencies.Should().BeInDescendingOrder(wordFrequency => wordFrequency.Value);
             wordFrequencies.Should().BeEquivalentTo(expectedWordFrequencies);
-        }               
+        }
+
+        [TestMethod]
+        public void TextFileProcesser_ComputeTwoGramFrequencies_NonExistingTestFileTest()
+        {
+            // Arrange
+            string invalidTextFile = "nonExistingFile.txt";
+            ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
+            Action action = () => tokenizer.ComputeTwoGramFrequencies();
+
+            // Act/Assert
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void TextFileProcesser_ComputeTwoGramFrequencies_ValidTextFileTest()
+        {
+            // Arrange           
+            ITextProcesser tokenizer = new TextFileProcesser(_CreateTextFile());
+            IEnumerable<KeyValuePair<TwoGram, int>> twoGramsFrequencies;
+            IEnumerable<KeyValuePair<TwoGram, int>> expectedTwoGramsFrequencies = _RetrieveExpectedTwoGramFrequencies();
+
+            // Act
+            twoGramsFrequencies = tokenizer.ComputeTwoGramFrequencies();
+
+            // Assert
+            twoGramsFrequencies.Should().BeInDescendingOrder(twoGramFrequency => twoGramFrequency.Value);
+            expectedTwoGramsFrequencies.Should().BeInDescendingOrder(twoGramFrequency => twoGramFrequency.Value);
+            twoGramsFrequencies.Should().BeEquivalentTo(expectedTwoGramsFrequencies);
+        }                      
         #endregion
 
         #region Auxiliar
@@ -131,6 +162,8 @@ namespace TextProcessingFunctions.Test.TextProcesser
 
                     if (line != null)
                     {
+                        // This method was conceived in the simplest and quickest way possible and expects a
+                        // hard-coded text file with the calculated word frequencies for the input text file
                         string[] wordData = line.Split('-');
 
                         wordFrequencies.Add
@@ -145,6 +178,42 @@ namespace TextProcessingFunctions.Test.TextProcesser
 
             return
                 wordFrequencies;
+        }
+
+        private IEnumerable<KeyValuePair<TwoGram, int>> _RetrieveExpectedTwoGramFrequencies()
+        {
+            Dictionary<TwoGram, int> twoGramsFrequencies = new Dictionary<TwoGram, int>();
+            string line;
+
+            using (StringReader reader = new StringReader(Resources.TestFile_ExpectedTwoGramFrequencies))
+            {
+                do
+                {
+                    line = reader.ReadLine();
+
+                    if (line != null)
+                    {
+                        // This method was conceived in the simplest and quickest way possible and expects
+                        // a hard-coded text file with the calculated 2-grams for the input text file
+                        string[] twoGramsData = line.Split('-');
+                        string[] tokens = twoGramsData[0].Split(' ');
+
+                        twoGramsFrequencies.Add
+                        (
+                            new TwoGram
+                            (
+                                new Token(tokens[0].Trim()), 
+                                new Token(tokens[1].Trim())
+                            ),
+                            int.Parse(twoGramsData[1].Trim())
+                        );
+                    }
+
+                } while (line != null);
+            }
+
+            return
+                twoGramsFrequencies;
         } 
         #endregion
     }
