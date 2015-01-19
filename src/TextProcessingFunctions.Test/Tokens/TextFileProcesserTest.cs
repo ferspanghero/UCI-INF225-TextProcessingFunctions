@@ -9,11 +9,11 @@ using System.Collections.Generic;
 namespace TextProcessingFunctions.Test.Tokens
 {
     [TestClass]
-    public class TextFileTokenizerTest
+    public class TextFileProcesserTest
     {
         #region Tests
         [TestMethod]
-        public void TextFileTokenizer_Constructor_InvalidFilePathTest()
+        public void TextFileProcesser_Constructor_InvalidFilePathTest()
         {
             // Arrange                 
             string invalidTextFilePath = "textFile.dat";
@@ -25,11 +25,11 @@ namespace TextProcessingFunctions.Test.Tokens
         }
 
         [TestMethod]
-        public void TextFileTokenizer_Tokenize_NonExistingTestFileTest()
+        public void TextFileProcesser_Tokenize_NonExistingTestFileTest()
         {
             // Arrange
             string invalidTextFile = "nonExistingFile.txt";
-            ITokenizer tokenizer = new TextFileTokenizer(invalidTextFile);
+            ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
             Action action = () => tokenizer.Tokenize();
 
             // Act/Assert
@@ -37,10 +37,10 @@ namespace TextProcessingFunctions.Test.Tokens
         }
 
         [TestMethod]
-        public void TextFileTokenizer_Tokenize_ValidTextFileTest()
+        public void TextFileProcesser_Tokenize_ValidTextFileTest()
         {
             // Arrange           
-            ITokenizer tokenizer = new TextFileTokenizer(_CreateTextFile());
+            ITextProcesser tokenizer = new TextFileProcesser(_CreateTextFile());
             IEnumerable<Token> tokens;
             IEnumerable<Token> expectedTokens = _RetrieveExpectedTokens();
 
@@ -52,11 +52,11 @@ namespace TextProcessingFunctions.Test.Tokens
         }
 
         [TestMethod]
-        public void TextFileTokenizer_ComputeWordFrequencies_NonExistingTestFileTest()
+        public void TextFileProcesser_ComputeWordFrequencies_NonExistingTestFileTest()
         {
             // Arrange
             string invalidTextFile = "nonExistingFile.txt";
-            ITokenizer tokenizer = new TextFileTokenizer(invalidTextFile);
+            ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
             Action action = () => tokenizer.ComputeWordFrequencies();
 
             // Act/Assert
@@ -64,10 +64,10 @@ namespace TextProcessingFunctions.Test.Tokens
         }
 
         [TestMethod]
-        public void TextFileTokenizer_ComputeWordFrequencies_ValidTextFileTest()
+        public void TextFileProcesser_ComputeWordFrequencies_ValidTextFileTest()
         {
             // Arrange           
-            ITokenizer tokenizer = new TextFileTokenizer(_CreateTextFile());
+            ITextProcesser tokenizer = new TextFileProcesser(_CreateTextFile());
             IEnumerable<KeyValuePair<string, int>> wordFrequencies;
             IEnumerable<KeyValuePair<string, int>> expectedWordFrequencies = _RetrieveExpectedWordFrequencies();
 
@@ -83,7 +83,7 @@ namespace TextProcessingFunctions.Test.Tokens
         private Action _CreateTokenizerAction(string textFilePath)
         {
             return
-                () => new TextFileTokenizer(textFilePath);
+                () => new TextFileProcesser(textFilePath);
         }
 
         private string _CreateTextFile()

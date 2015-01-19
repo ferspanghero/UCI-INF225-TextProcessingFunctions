@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TextProcessingFunctions.Core.Tokens
 {
+    /// <summary>
+    /// Represents a token extracted from a text input
+    /// </summary>
     public class Token : IEquatable<Token>
     {
         #region Constructors

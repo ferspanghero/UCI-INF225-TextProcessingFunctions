@@ -19,12 +19,12 @@ namespace TextProcessingFunctions
             // Takes the text file path as a command-line input
             string textFilePath = args[0];
 
-            ITokenizer tokenizer = new TextFileTokenizer(textFilePath);
+            ITextProcesser tokenizer = new TextFileProcesser(textFilePath);
 
             _PrintWordFrequencies(tokenizer);
         }
 
-        private static void _PrintTokens(ITokenizer tokenizer)
+        private static void _PrintTokens(ITextProcesser tokenizer)
         {
             var tokens = tokenizer.Tokenize();
 
@@ -32,7 +32,7 @@ namespace TextProcessingFunctions
                 Console.WriteLine(token);
         }
 
-        private static void _PrintWordFrequencies(ITokenizer tokenizer)
+        private static void _PrintWordFrequencies(ITextProcesser tokenizer)
         {
             var wordFrequencies = tokenizer.ComputeWordFrequencies();
 
