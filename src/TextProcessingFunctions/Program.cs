@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextProcessingFunctions.Core.Tokens;
+using TextProcessingFunctions.Core.TextProcesser;
 
 namespace TextProcessingFunctions
 {

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TextProcessingFunctions.Core.Properties;
 
-namespace TextProcessingFunctions.Core.Tokens
+namespace TextProcessingFunctions.Core.TextProcesser
 {   
     /// <summary>
     /// Represents a text processer that takes text files as input

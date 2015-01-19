@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TextProcessingFunctions.Core.Tokens;
+using TextProcessingFunctions.Core.TextProcesser;
 using FluentAssertions;
 using TextProcessingFunctions.Test.Properties;
 using System.IO;
 using System.Collections.Generic;
 
-namespace TextProcessingFunctions.Test.Tokens
+namespace TextProcessingFunctions.Test.TextProcesser
 {
     [TestClass]
     public class TextFileProcesserTest

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextProcessingFunctions.Core.Tokens
+namespace TextProcessingFunctions.Core.TextProcesser
 {
     /// <summary>
     /// Represents a token extracted from a text input

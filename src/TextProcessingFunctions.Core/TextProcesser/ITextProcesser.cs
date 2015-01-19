@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextProcessingFunctions.Core.Tokens
+namespace TextProcessingFunctions.Core.TextProcesser
 {   
     /// <summary>
     /// Defines a processor which takes text as input and performs a set of operations

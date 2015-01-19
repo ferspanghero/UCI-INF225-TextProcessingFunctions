@@ -44,10 +44,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tokens\ITextProcesser.cs" />
+    <Compile Include="TextProcesser\ITextProcesser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tokens\TextFileProcesser.cs" />
-    <Compile Include="Tokens\Token.cs" />
+    <Compile Include="TextProcesser\TextFileProcesser.cs" />
+    <Compile Include="TextProcesser\Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
