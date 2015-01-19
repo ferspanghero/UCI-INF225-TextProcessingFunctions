@@ -12,14 +12,13 @@ namespace TextProcessingFunctions.Core.TextProcesser
     public interface ITextProcesser
     {
         /// <summary>
-        /// Converts a text input into Tokens
+        /// Converts a text input words into tokens
         /// </summary>
         IEnumerable<Token> Tokenize();
 
         /// <summary>
         /// Calculates a text input words frequencies
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<KeyValuePair<string, int>> ComputeWordFrequencies();
+        IEnumerable<KeyValuePair<Token, int>> ComputeWordFrequencies();
     }
 }

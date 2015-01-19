@@ -19,9 +19,39 @@ namespace TextProcessingFunctions
             // Takes the text file path as a command-line input
             string textFilePath = args[0];
 
-            ITextProcesser tokenizer = new TextFileProcesser(textFilePath);
+            ITextProcesser tokenizer = new TextFileProcesser(textFilePath);            
 
-            _PrintWordFrequencies(tokenizer);
+            int option = -1;
+
+            do
+            {
+                Console.WriteLine("Press 1 to tokenize");
+                Console.WriteLine("Press 2 to calculate word frequencies");
+                Console.WriteLine("Press 3 to exit");
+
+                int.TryParse(Console.ReadLine(), out option);
+
+                if (option == 1)
+                    _MeasureTime(() => _PrintTokens(tokenizer));
+                else if (option == 2)
+                    _MeasureTime(() => _PrintWordFrequencies(tokenizer));
+
+                Console.WriteLine();
+
+            } while (option != 3);
+        }
+
+        private static void _MeasureTime(Action action)
+        {
+            Stopwatch watch = new Stopwatch();
+
+            watch.Start();
+
+            action();
+
+            watch.Stop();
+
+            Console.WriteLine("Elapsed time: {0}", watch.Elapsed);
         }
 
         private static void _PrintTokens(ITextProcesser tokenizer)
@@ -30,6 +60,9 @@ namespace TextProcessingFunctions
 
             foreach (var token in tokens)
                 Console.WriteLine(token);
+
+            Console.WriteLine();
+            Console.WriteLine("Total number of tokens: {0}", tokens.Count());
         }
 
         private static void _PrintWordFrequencies(ITextProcesser tokenizer)

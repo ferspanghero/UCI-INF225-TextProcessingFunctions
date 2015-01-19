@@ -68,8 +68,8 @@ namespace TextProcessingFunctions.Test.TextProcesser
         {
             // Arrange           
             ITextProcesser tokenizer = new TextFileProcesser(_CreateTextFile());
-            IEnumerable<KeyValuePair<string, int>> wordFrequencies;
-            IEnumerable<KeyValuePair<string, int>> expectedWordFrequencies = _RetrieveExpectedWordFrequencies();
+            IEnumerable<KeyValuePair<Token, int>> wordFrequencies;
+            IEnumerable<KeyValuePair<Token, int>> expectedWordFrequencies = _RetrieveExpectedWordFrequencies();
 
             // Act
             wordFrequencies = tokenizer.ComputeWordFrequencies();
@@ -118,9 +118,9 @@ namespace TextProcessingFunctions.Test.TextProcesser
                 tokens;
         }  
 
-        private IEnumerable<KeyValuePair<string, int>> _RetrieveExpectedWordFrequencies()
+        private IEnumerable<KeyValuePair<Token, int>> _RetrieveExpectedWordFrequencies()
         {
-            Dictionary<string, int> wordFrequencies = new Dictionary<string, int>();
+            Dictionary<Token, int> wordFrequencies = new Dictionary<Token, int>();
             string line;
 
             using (StringReader reader = new StringReader(Resources.TestFile_ExpectedWordFrequencies))
@@ -135,7 +135,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
 
                         wordFrequencies.Add
                         (
-                            wordData[0].Trim(), 
+                            new Token(wordData[0].Trim()), 
                             int.Parse(wordData[1].Trim())
                         );
                     }

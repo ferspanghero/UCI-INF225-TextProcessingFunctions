@@ -20,58 +20,40 @@ namespace TextProcessingFunctions.Core.TextProcesser
             if (string.IsNullOrEmpty(filePath) || !Regex.IsMatch(filePath, "^*.txt$"))
                 throw new ArgumentException(Resources.ArgumentException_InvalidTextFilePathMessage);
 
-            this._filePath = filePath;
+            _filePath = filePath;
+            _indistinctTokenList = new List<Token>();
         }
         #endregion        
 
         #region Properties
         private string _filePath;
-        #endregion
-
-        #region Delegates
-        private delegate void TextProcessingAction<TOutput>(TOutput output, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount);
+        private List<Token> _indistinctTokenList;
         #endregion
 
         #region Methods
-        private void _AddToken(HashSet<Token> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
+        private void _AddToken(ICollection<Token> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
         {
-            string word = _ExtractWord(bufferSize, ref wordBuffer, ref wordBufferCount);
-
+            // Converts the buffer into a lowercase string
+            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();                        
             Token token = new Token(word);
 
             // If it tries to add a token that already exists, HashSet<T> automatically discards it
             tokens.Add(token);
-        }        
-
-        private void _AddWordFrequency(Dictionary<string, int> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
-        {
-            string word = _ExtractWord(bufferSize, ref wordBuffer, ref wordBufferCount);
-
-            // If it tries to add a token that already exists, we should increment the existing token frequency number instead
-            if (tokens.ContainsKey(word))
-                tokens[word]++;
-            else
-                tokens.Add(word, 1);          
-        }
-
-        private string _ExtractWord(int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
-        {
-            // Converts the buffer into a lowercase string
-            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();
 
             // Resets word buffer
             wordBuffer = new char[bufferSize];
             wordBufferCount = 0;
-            return word;
-        }
+        }        
+        #endregion
 
-        /// <summary>
-        /// Auxiliar method that contains the main text processing algorithm
-        /// </summary>
-        private TOutput _ProcessText<TOutput>(TOutput output, TextProcessingAction<TOutput> textProcessingAction)
+        #region ITokenizer Implementation
+        public IEnumerable<Token> Tokenize()
         {
             if (!File.Exists(_filePath))
                 throw new ArgumentException(Resources.ArgumentException_NonExistingTextFileMessage);
+
+            // Clears up the indistinct tokens list to ensure idempotency
+            _indistinctTokenList.Clear();
 
             using (StreamReader reader = File.OpenText(_filePath))
             {
@@ -100,45 +82,43 @@ namespace TextProcessingFunctions.Core.TextProcesser
 
                                 // If it reads the last character of the file and it is alphanumerical, then we have a word
                                 if (i == charactersReadCount - 1 && reader.EndOfStream)
-                                    textProcessingAction(output, bufferSize, ref wordBuffer, ref wordBufferCount);
+                                    _AddToken(_indistinctTokenList, bufferSize, ref wordBuffer, ref wordBufferCount);
                             }
 
                             // If it hits a non-alphanumerical character and the word buffer is not empty, then we have a word
                             else if (wordBufferCount > 0)
-                                textProcessingAction(output, bufferSize, ref wordBuffer, ref wordBufferCount);
+                                _AddToken(_indistinctTokenList, bufferSize, ref wordBuffer, ref wordBufferCount);
                         }
                     }
                 }
             }
 
+            // Discards tokens repetition by return a distinct collection
             return
-                output;
-        }
-        #endregion
-
-        #region ITokenizer Implementation
-        public IEnumerable<Token> Tokenize()
-        {
-            // Considering tokens are always unique, a HashSet<T> will always provide 
-            // a O(1) complexity if it is necessary to search for a particular token
-            HashSet<Token> tokens = new HashSet<Token>();
-
-            _ProcessText<HashSet<Token>>(tokens, _AddToken);
-
-            return
-                tokens;
+                _indistinctTokenList.Distinct();
         }
 
-        public IEnumerable<KeyValuePair<string, int>> ComputeWordFrequencies()
+        public IEnumerable<KeyValuePair<Token, int>> ComputeWordFrequencies()
         {
             // Considering tokens are always unique, a Dictionary<TKey, TValue> will always provide 
             // a O(1) time complexity if it is necessary to search for a particular token
-            Dictionary<string, int> wordFrequencies = new Dictionary<string, int>();
+            Dictionary<Token, int> wordFrequencies = new Dictionary<Token, int>();
 
-            _ProcessText<Dictionary<string, int>>(wordFrequencies, _AddWordFrequency);
+            // If there are no processed tokens, try to tokenize the input text file
+            if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
+                Tokenize();
+
+            foreach (var token in _indistinctTokenList)
+            {
+                // If it tries to add a token that already exists, we should increment the existing token frequency number instead
+                if (wordFrequencies.ContainsKey(token))
+                    wordFrequencies[token]++;
+                else
+                    wordFrequencies.Add(token, 1);
+            }
 
             return
-                wordFrequencies.OrderByDescending(pair => pair.Value);
+                wordFrequencies;
         }
         #endregion
     }
