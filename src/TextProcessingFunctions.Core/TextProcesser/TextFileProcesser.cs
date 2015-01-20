@@ -173,14 +173,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
             if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
                 Tokenize();
 
-            // REQ: Consider one word palindromes
-            // REQ: Consider multiple word palindromes
-            // REQ: Discard one letter palindromes
-            // REQ: Overlapping palindromes
-            // REQ: Outer and inner palindromes
-            // REQ: Calculate time complexity            
-
-            // This algorithm runs in O(N^2) time complexity
+            // This algorithm runs in O(N^2) time complexity on any case
             for (int i = 0; i < _indistinctTokenList.Count; i++)
             {
                 for (int j = i; j < _indistinctTokenList.Count; j++)
@@ -199,8 +192,6 @@ namespace TextProcessingFunctions.Core.TextProcesser
                 palindromeCandidate = string.Empty;
             }
             
-            // REQ: Independent palindromes ???                                   
-
             return
                 palindromeFrequencies.OrderByDescending(palindromeFrequency => palindromeFrequency.Value);
         }

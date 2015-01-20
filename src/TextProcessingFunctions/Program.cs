@@ -14,37 +14,46 @@ namespace TextProcessingFunctions
         static void Main(string[] args)
         {
             if (args == null || args.Length != 1)
-                throw new ArgumentException("Invalid command-line arguments: provide a single argument with the text file path");
+                Console.WriteLine("ERROR: Invalid command-line arguments: provide a single argument with the text file path");
+            else
+            {                
+                try
+                {
+                    // Takes the text file path as a command-line input
+                    string textFilePath = args[0];
 
-            // Takes the text file path as a command-line input
-            string textFilePath = args[0];
+                    ITextProcesser tokenizer = new TextFileProcesser(textFilePath);
 
-            ITextProcesser tokenizer = new TextFileProcesser(textFilePath);            
+                    int option = -1;
 
-            int option = -1;
+                    do
+                    {
+                        Console.WriteLine("Press 1 to tokenize");
+                        Console.WriteLine("Press 2 to calculate word frequencies");
+                        Console.WriteLine("Press 3 to calculate 2-gram frequencies");
+                        Console.WriteLine("Press 4 to calculate palindrome frequencies");
+                        Console.WriteLine("Press 0 to exit");
 
-            do
-            {
-                Console.WriteLine("Press 1 to tokenize");
-                Console.WriteLine("Press 2 to calculate word frequencies");
-                Console.WriteLine("Press 3 to calculate 2-gram frequencies");
-                Console.WriteLine("Press 4 to calculate palindrome frequencies");
-                Console.WriteLine("Press 0 to exit");
+                        int.TryParse(Console.ReadLine(), out option);
 
-                int.TryParse(Console.ReadLine(), out option);
+                        if (option == 1)
+                            _MeasureTime(() => _PrintTokens(tokenizer));
+                        else if (option == 2)
+                            _MeasureTime(() => _PrintWordFrequencies(tokenizer));
+                        else if (option == 3)
+                            _MeasureTime(() => _PrintTwoGramFrequencies(tokenizer));
+                        else if (option == 4)
+                            _MeasureTime(() => _PrintPalindromeFrequencies(tokenizer));
 
-                if (option == 1)
-                    _MeasureTime(() => _PrintTokens(tokenizer));
-                else if (option == 2)
-                    _MeasureTime(() => _PrintWordFrequencies(tokenizer));
-                else if (option == 3)
-                    _MeasureTime(() => _PrintTwoGramFrequencies(tokenizer));
-                else if (option == 4)
-                    _MeasureTime(() => _PrintPalindromeFrequencies(tokenizer));
+                        Console.WriteLine();
 
-                Console.WriteLine();
-
-            } while (option != 0);
+                    } while (option != 0);
+                }                
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERROR: {0}", ex.Message);
+                }
+            }
         }        
 
         private static void _MeasureTime(Action action)
