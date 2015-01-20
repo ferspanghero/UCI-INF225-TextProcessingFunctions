@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TextProcessingFunctions.Core.Properties;
 
 namespace TextProcessingFunctions.Core.TextProcesser
-{   
+{
     /// <summary>
     /// Represents a text processer that takes text files as input
     /// </summary>
@@ -23,7 +23,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
             _filePath = filePath;
             _indistinctTokenList = new List<Token>();
         }
-        #endregion        
+        #endregion
 
         #region Properties
         private string _filePath;
@@ -34,7 +34,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
         private void _AddToken(ICollection<Token> tokens, int bufferSize, ref char[] wordBuffer, ref int wordBufferCount)
         {
             // Converts the buffer into a lowercase string
-            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();                        
+            string word = new string(wordBuffer, 0, wordBufferCount).ToLower();
             Token token = new Token(word);
 
             // If it tries to add a token that already exists, HashSet<T> automatically discards it
@@ -43,7 +43,27 @@ namespace TextProcessingFunctions.Core.TextProcesser
             // Resets word buffer
             wordBuffer = new char[bufferSize];
             wordBufferCount = 0;
-        }        
+        }
+
+        private bool _IsPalindrome(string text)
+        {
+            // Empty, null and one letter strings are not considered palindromes
+            if (string.IsNullOrEmpty(text) || text.Length == 1)
+                return false;
+
+            int lengthChecked = text.Length / 2;
+
+            // Only iterates half of the text
+            for (int i = 0; i < lengthChecked; i++)
+            {
+                // Checks a character with its opposite counterpart from the end of the text
+                if (text[i] != text[text.Length - i - 1])
+                    return false;
+            }
+
+            return
+                true;
+        }
         #endregion
 
         #region ITokenizer Implementation
@@ -140,9 +160,50 @@ namespace TextProcessingFunctions.Core.TextProcesser
                     twoGramFrequencies.Add(twoGram, 1);
             }
 
-            return 
+            return
                 twoGramFrequencies.OrderByDescending(twoGramFrequency => twoGramFrequency.Value);
         }
-        #endregion        
+
+        public IEnumerable<KeyValuePair<string, int>> ComputePalindromeFrequencies()
+        {
+            Dictionary<string, int> palindromeFrequencies = new Dictionary<string, int>();
+            string palindromeCandidate = string.Empty;
+
+            // If there are no processed tokens, try to tokenize the input text file
+            if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
+                Tokenize();
+
+            // REQ: Consider one word palindromes
+            // REQ: Consider multiple word palindromes
+            // REQ: Discard one letter palindromes
+            // REQ: Overlapping palindromes
+            // REQ: Outer and inner palindromes
+            // REQ: Calculate time complexity            
+
+            // This algorithm runs in O(N^2) time complexity
+            for (int i = 0; i < _indistinctTokenList.Count; i++)
+            {
+                for (int j = i; j < _indistinctTokenList.Count; j++)
+                {
+                    palindromeCandidate += _indistinctTokenList[j].Content;
+
+                    if (_IsPalindrome(palindromeCandidate))
+                    {
+                        if (palindromeFrequencies.ContainsKey(palindromeCandidate))
+                            palindromeFrequencies[palindromeCandidate]++;
+                        else
+                            palindromeFrequencies.Add(palindromeCandidate, 1);
+                    }
+                }
+
+                palindromeCandidate = string.Empty;
+            }
+            
+            // REQ: Independent palindromes ???                                   
+
+            return
+                palindromeFrequencies.OrderByDescending(palindromeFrequency => palindromeFrequency.Value);
+        }
+        #endregion
     }
 }

@@ -94,6 +94,9 @@
   <ItemGroup>
     <None Include="Resources\TestFile_ExpectedTwoGramFrequencies.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TestFile_ExpectedPalindromeFrequencies.txt" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

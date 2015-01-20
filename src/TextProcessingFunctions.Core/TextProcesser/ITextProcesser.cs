@@ -17,13 +17,18 @@ namespace TextProcessingFunctions.Core.TextProcesser
         IEnumerable<Token> Tokenize();
 
         /// <summary>
-        /// Calculates a text input words frequencies
+        /// Calculates a text input word frequencies
         /// </summary>
         IEnumerable<KeyValuePair<Token, int>> ComputeWordFrequencies();
 
         /// <summary>
-        /// Calculates a text input 2-grams frequencies
+        /// Calculates a text input 2-gram frequencies
         /// </summary>
         IEnumerable<KeyValuePair<TwoGram, int>> ComputeTwoGramFrequencies();
+
+        /// <summary>
+        /// Calculates a text input palindrome frequencies
+        /// </summary>
+        IEnumerable<KeyValuePair<string, int>> ComputePalindromeFrequencies();
     }
 }

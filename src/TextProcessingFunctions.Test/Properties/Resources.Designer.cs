@@ -61,6 +61,15 @@ namespace TextProcessingFunctions.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string TestFile_ExpectedPalindromeFrequencies {
+            get {
+                return ResourceManager.GetString("TestFile_ExpectedPalindromeFrequencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to i
         ///was
         ///coaching
@@ -139,7 +148,38 @@ namespace TextProcessingFunctions.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to at the - 16
+        ///increase in - 10
+        ///the product - 9
+        ///the business - 7
+        ///level the - 6
+        ///product level - 6
+        ///business level - 6
+        ///of the - 5
+        ///user stories - 5
+        ///you can - 5
+        ///the team - 5
+        ///team level - 5
+        ///is to - 4
+        ///customer value - 4
+        ///in the - 4
+        ///you are - 4
+        ///am i - 4
+        ///happy customers - 4
+        ///customers and - 4
+        ///20 increase - 4
+        ///in revenue - 4
+        ///to increase - 4
+        ///frequent flyer - 4
+        ///of rebooking - 4
+        ///sprint reviews - 3
+        ///focus on - 3
+        ///the customer - 3
+        ///a product - 3
+        ///a user - 3
+        ///your sprint - 3
+        ///it is - 3
+        ///sprint review - 3        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestFile_ExpectedTwoGramFrequencies {
             get {

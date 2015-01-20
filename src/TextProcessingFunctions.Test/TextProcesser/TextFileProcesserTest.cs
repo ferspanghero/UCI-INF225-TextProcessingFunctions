@@ -49,19 +49,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
 
             // Assert            
             tokens.Should().BeEquivalentTo(expectedTokens);
-        }
-
-        [TestMethod]
-        public void TextFileProcesser_ComputeWordFrequencies_NonExistingTestFileTest()
-        {
-            // Arrange
-            string invalidTextFile = "nonExistingFile.txt";
-            ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
-            Action action = () => tokenizer.ComputeWordFrequencies();
-
-            // Act/Assert
-            action.ShouldThrow<ArgumentException>();
-        }
+        }        
 
         [TestMethod]
         public void TextFileProcesser_ComputeWordFrequencies_ValidTextFileTest()
@@ -78,19 +66,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
             wordFrequencies.Should().BeInDescendingOrder(wordFrequency => wordFrequency.Value);
             expectedWordFrequencies.Should().BeInDescendingOrder(wordFrequency => wordFrequency.Value);
             wordFrequencies.Should().BeEquivalentTo(expectedWordFrequencies);
-        }
-
-        [TestMethod]
-        public void TextFileProcesser_ComputeTwoGramFrequencies_NonExistingTestFileTest()
-        {
-            // Arrange
-            string invalidTextFile = "nonExistingFile.txt";
-            ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
-            Action action = () => tokenizer.ComputeTwoGramFrequencies();
-
-            // Act/Assert
-            action.ShouldThrow<ArgumentException>();
-        }
+        }        
 
         [TestMethod]
         public void TextFileProcesser_ComputeTwoGramFrequencies_ValidTextFileTest()
@@ -107,7 +83,24 @@ namespace TextProcessingFunctions.Test.TextProcesser
             twoGramsFrequencies.Should().BeInDescendingOrder(twoGramFrequency => twoGramFrequency.Value);
             expectedTwoGramsFrequencies.Should().BeInDescendingOrder(twoGramFrequency => twoGramFrequency.Value);
             twoGramsFrequencies.Should().BeEquivalentTo(expectedTwoGramsFrequencies);
-        }                      
+        }
+
+        [TestMethod]
+        public void TextFileProcesser_ComputePalindromeFrequencies_ValidTextFileTest()
+        {
+            // Arrange           
+            ITextProcesser tokenizer = new TextFileProcesser(_CreateTextFile());
+            IEnumerable<KeyValuePair<string, int>> palindromeFrequencies;
+            IEnumerable<KeyValuePair<string, int>> expectedpalindromeFrequencies = _RetrieveExpectedPalindromeFrequencies();
+
+            // Act
+            palindromeFrequencies = tokenizer.ComputePalindromeFrequencies();
+
+            // Assert
+            palindromeFrequencies.Should().BeInDescendingOrder(palindromeFrequency => palindromeFrequency.Value);
+            expectedpalindromeFrequencies.Should().BeInDescendingOrder(palindromeFrequency => palindromeFrequency.Value);
+            palindromeFrequencies.Should().BeEquivalentTo(expectedpalindromeFrequencies);
+        }                              
         #endregion
 
         #region Auxiliar
@@ -214,7 +207,38 @@ namespace TextProcessingFunctions.Test.TextProcesser
 
             return
                 twoGramsFrequencies;
-        } 
+        }
+
+        private IEnumerable<KeyValuePair<string, int>> _RetrieveExpectedPalindromeFrequencies()
+        {
+            Dictionary<string, int> palindromeFrequencies = new Dictionary<string, int>();
+            string line;
+
+            using (StringReader reader = new StringReader(Resources.TestFile_ExpectedPalindromeFrequencies))
+            {
+                do
+                {
+                    line = reader.ReadLine();
+
+                    if (line != null)
+                    {
+                        // This method was conceived in the simplest and quickest way possible and expects
+                        // a hard-coded text file with the calculated 2-grams for the input text file
+                        string[] palindromeData = line.Split('-');
+
+                        palindromeFrequencies.Add
+                        (
+                            palindromeData[0].Trim(),
+                            int.Parse(palindromeData[1].Trim())
+                        );
+                    }
+
+                } while (line != null);
+            }
+
+            return
+                palindromeFrequencies;
+        }
         #endregion
     }
 }
