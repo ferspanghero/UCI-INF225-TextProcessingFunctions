@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TextProcessingFunctions.Core.Properties;
 
 namespace TextProcessingFunctions.Core.TextProcesser
@@ -26,8 +24,8 @@ namespace TextProcessingFunctions.Core.TextProcesser
         #endregion
 
         #region Properties
-        private string _filePath;
-        private List<Token> _indistinctTokenList;
+        private readonly string _filePath;
+        private readonly List<Token> _indistinctTokenList;
         #endregion
 
         #region Methods
@@ -77,9 +75,8 @@ namespace TextProcessingFunctions.Core.TextProcesser
 
             using (StreamReader reader = File.OpenText(_filePath))
             {
-                int bufferSize = 1024;
-                int charactersReadCount = 0;
-                int textFileStreamCurrentPosition = 0;
+                const int bufferSize = 1024;
+                int charactersReadCount;
                 char[] buffer = new char[bufferSize];
 
                 // A word buffer is necessary instead of storing simple indexes because a word can start in one chunk and end in another
@@ -88,9 +85,9 @@ namespace TextProcessingFunctions.Core.TextProcesser
 
                 while (!reader.EndOfStream)
                 {
-                    charactersReadCount = reader.Read(buffer, textFileStreamCurrentPosition, bufferSize);
+                    charactersReadCount = reader.Read(buffer, 0, bufferSize);
 
-                    if (buffer != null && charactersReadCount > 0)
+                    if (charactersReadCount > 0)
                     {
                         // Only considers the number of characters read since it can be smaller than the buffer itself
                         for (int i = 0; i < charactersReadCount; i++)
@@ -128,14 +125,15 @@ namespace TextProcessingFunctions.Core.TextProcesser
             if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
                 Tokenize();
 
-            foreach (var token in _indistinctTokenList)
-            {
-                // If it tries to add a token that already exists, we should increment the existing token frequency number instead
-                if (wordFrequencies.ContainsKey(token))
-                    wordFrequencies[token]++;
-                else
-                    wordFrequencies.Add(token, 1);
-            }
+            if (_indistinctTokenList != null)
+                foreach (var token in _indistinctTokenList)
+                {
+                    // If it tries to add a token that already exists, we should increment the existing token frequency number instead
+                    if (wordFrequencies.ContainsKey(token))
+                        wordFrequencies[token]++;
+                    else
+                        wordFrequencies.Add(token, 1);
+                }
 
             return
                 wordFrequencies.OrderByDescending(wordFrequency => wordFrequency.Value);
@@ -144,21 +142,22 @@ namespace TextProcessingFunctions.Core.TextProcesser
         public IEnumerable<KeyValuePair<TwoGram, int>> ComputeTwoGramFrequencies()
         {
             Dictionary<TwoGram, int> twoGramFrequencies = new Dictionary<TwoGram, int>();
-            TwoGram twoGram = null;
+            TwoGram twoGram;
 
             // If there are no processed tokens, try to tokenize the input text file
             if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
                 Tokenize();
 
-            for (int i = 0; i < _indistinctTokenList.Count - 1; i++)
-            {
-                twoGram = new TwoGram(_indistinctTokenList[i], _indistinctTokenList[i + 1]);
+            if (_indistinctTokenList != null)
+                for (int i = 0; i < _indistinctTokenList.Count - 1; i++)
+                {
+                    twoGram = new TwoGram(_indistinctTokenList[i], _indistinctTokenList[i + 1]);
 
-                if (twoGramFrequencies.ContainsKey(twoGram))
-                    twoGramFrequencies[twoGram]++;
-                else
-                    twoGramFrequencies.Add(twoGram, 1);
-            }
+                    if (twoGramFrequencies.ContainsKey(twoGram))
+                        twoGramFrequencies[twoGram]++;
+                    else
+                        twoGramFrequencies.Add(twoGram, 1);
+                }
 
             return
                 twoGramFrequencies.OrderByDescending(twoGramFrequency => twoGramFrequency.Value);
@@ -173,25 +172,26 @@ namespace TextProcessingFunctions.Core.TextProcesser
             if (_indistinctTokenList == null || _indistinctTokenList.Count == 0)
                 Tokenize();
 
-            // This algorithm runs in O(N^2) time complexity on any case
-            for (int i = 0; i < _indistinctTokenList.Count; i++)
-            {
-                for (int j = i; j < _indistinctTokenList.Count; j++)
+            if (_indistinctTokenList != null)
+                // This algorithm runs in O(N^2) time complexity on any case
+                for (int i = 0; i < _indistinctTokenList.Count; i++)
                 {
-                    palindromeCandidate += _indistinctTokenList[j].Content;
-
-                    if (_IsPalindrome(palindromeCandidate))
+                    for (int j = i; j < _indistinctTokenList.Count; j++)
                     {
-                        if (palindromeFrequencies.ContainsKey(palindromeCandidate))
-                            palindromeFrequencies[palindromeCandidate]++;
-                        else
-                            palindromeFrequencies.Add(palindromeCandidate, 1);
+                        palindromeCandidate += _indistinctTokenList[j].Content;
+
+                        if (_IsPalindrome(palindromeCandidate))
+                        {
+                            if (palindromeFrequencies.ContainsKey(palindromeCandidate))
+                                palindromeFrequencies[palindromeCandidate]++;
+                            else
+                                palindromeFrequencies.Add(palindromeCandidate, 1);
+                        }
                     }
+
+                    palindromeCandidate = string.Empty;
                 }
 
-                palindromeCandidate = string.Empty;
-            }
-            
             return
                 palindromeFrequencies.OrderByDescending(palindromeFrequency => palindromeFrequency.Value);
         }

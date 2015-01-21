@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextProcessingFunctions.Core.TextProcesser;
 
 namespace TextProcessingFunctions
@@ -24,7 +20,7 @@ namespace TextProcessingFunctions
 
                     ITextProcesser tokenizer = new TextFileProcesser(textFilePath);
 
-                    int option = -1;
+                    int option;
 
                     do
                     {

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TextProcessingFunctions.Core.TextProcesser;
-using FluentAssertions;
 using TextProcessingFunctions.Test.Properties;
-using System.IO;
-using System.Collections.Generic;
 
 namespace TextProcessingFunctions.Test.TextProcesser
 {
@@ -16,7 +16,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
         public void TextFileProcesser_Constructor_InvalidFilePathTest()
         {
             // Arrange                 
-            string invalidTextFilePath = "textFile.dat";
+            const string invalidTextFilePath = "textFile.dat";
 
             // Act/Assert
             _CreateTokenizerAction(string.Empty).ShouldThrow<ArgumentException>();
@@ -28,7 +28,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
         public void TextFileProcesser_Tokenize_NonExistingTestFileTest()
         {
             // Arrange
-            string invalidTextFile = "nonExistingFile.txt";
+            const string invalidTextFile = "nonExistingFile.txt";
             ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
             Action action = () => tokenizer.Tokenize();
 

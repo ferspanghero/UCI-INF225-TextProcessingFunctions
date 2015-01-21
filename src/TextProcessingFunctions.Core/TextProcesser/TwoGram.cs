@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TextProcessingFunctions.Core.TextProcesser
 {
@@ -20,8 +16,8 @@ namespace TextProcessingFunctions.Core.TextProcesser
         #endregion
 
         #region Properties
-        public Token Token1 { get; set; }
-        public Token Token2 { get; set; }
+        public Token Token1 { get; private set; }
+        public Token Token2 { get; private set; }
         #endregion
 
         #region Methods
