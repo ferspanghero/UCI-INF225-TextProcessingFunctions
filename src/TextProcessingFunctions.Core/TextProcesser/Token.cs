@@ -10,7 +10,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
         #region Constructors
         public Token(string content)
         {
-            this.Content = content;
+            Content = content;
         }
         #endregion
 
@@ -25,7 +25,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
             bool equals = false;
 
             if (otherToken != null)
-                equals = this.Equals(otherToken);
+                equals = Equals(otherToken);
 
             return
                 equals;
@@ -35,13 +35,13 @@ namespace TextProcessingFunctions.Core.TextProcesser
         public override int GetHashCode()
         {
             return
-                this.Content.GetHashCode();
+                Content.GetHashCode();
         }
 
         public override string ToString()
         {
             return
-                this.Content;
+                Content;
         }
         #endregion
 
@@ -52,7 +52,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
             return
                 other != null
                 &&
-                this.Content.Equals(other.Content);
+                Content.Equals(other.Content);
         }
 
         #endregion

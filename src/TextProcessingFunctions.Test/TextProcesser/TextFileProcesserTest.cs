@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TextProcessingFunctions.Core.TextProcesser;
@@ -30,7 +31,9 @@ namespace TextProcessingFunctions.Test.TextProcesser
             // Arrange
             const string invalidTextFile = "nonExistingFile.txt";
             ITextProcesser tokenizer = new TextFileProcesser(invalidTextFile);
-            Action action = () => tokenizer.Tokenize();
+
+            // The ToList is necessary due to IEnumerable lazy loading
+            Action action = () => tokenizer.Tokenize().ToList();
 
             // Act/Assert
             action.ShouldThrow<ArgumentException>();
@@ -48,7 +51,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
             tokens = tokenizer.Tokenize();
 
             // Assert            
-            tokens.Should().BeEquivalentTo(expectedTokens);
+            tokens.Distinct().Should().BeEquivalentTo(expectedTokens);
         }        
 
         [TestMethod]
@@ -124,10 +127,11 @@ namespace TextProcessingFunctions.Test.TextProcesser
         private IEnumerable<Token> _RetrieveExpectedTokens()
         {
             HashSet<Token> tokens = new HashSet<Token>();
-            string line;
 
             using (StringReader reader = new StringReader(Resources.TestFile_ExpectedTokens))
             {
+                string line;
+
                 do
                 {
                     line = reader.ReadLine();
@@ -145,10 +149,11 @@ namespace TextProcessingFunctions.Test.TextProcesser
         private IEnumerable<KeyValuePair<Token, int>> _RetrieveExpectedWordFrequencies()
         {
             Dictionary<Token, int> wordFrequencies = new Dictionary<Token, int>();
-            string line;
 
             using (StringReader reader = new StringReader(Resources.TestFile_ExpectedWordFrequencies))
             {
+                string line;
+
                 do
                 {
                     line = reader.ReadLine();
@@ -166,7 +171,7 @@ namespace TextProcessingFunctions.Test.TextProcesser
                         );
                     }
 
-                } while (line != null);                
+                } while (line != null);
             }
 
             return
@@ -176,10 +181,11 @@ namespace TextProcessingFunctions.Test.TextProcesser
         private IEnumerable<KeyValuePair<TwoGram, int>> _RetrieveExpectedTwoGramFrequencies()
         {
             Dictionary<TwoGram, int> twoGramsFrequencies = new Dictionary<TwoGram, int>();
-            string line;
 
             using (StringReader reader = new StringReader(Resources.TestFile_ExpectedTwoGramFrequencies))
             {
+                string line;
+
                 do
                 {
                     line = reader.ReadLine();
@@ -212,10 +218,11 @@ namespace TextProcessingFunctions.Test.TextProcesser
         private IEnumerable<KeyValuePair<string, int>> _RetrieveExpectedPalindromeFrequencies()
         {
             Dictionary<string, int> palindromeFrequencies = new Dictionary<string, int>();
-            string line;
 
             using (StringReader reader = new StringReader(Resources.TestFile_ExpectedPalindromeFrequencies))
             {
+                string line;
+
                 do
                 {
                     line = reader.ReadLine();

@@ -68,13 +68,16 @@ namespace TextProcessingFunctions
 
         private static void _PrintTokens(ITextProcesser tokenizer)
         {
-            var tokens = tokenizer.Tokenize();
+            int count = 0;
 
-            foreach (var token in tokens)
+            foreach (var token in tokenizer.Tokenize().Distinct())
+            {
                 Console.WriteLine(token);
+                count++;
+            }
 
             Console.WriteLine();
-            Console.WriteLine("Total number of tokens: {0}", tokens.Count());
+            Console.WriteLine("Total number of tokens: {0}", count);
         }
 
         private static void _PrintWordFrequencies(ITextProcesser tokenizer)

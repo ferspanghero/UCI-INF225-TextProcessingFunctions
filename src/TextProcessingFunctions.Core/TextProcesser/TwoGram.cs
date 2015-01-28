@@ -10,8 +10,14 @@ namespace TextProcessingFunctions.Core.TextProcesser
         #region Constructors
         public TwoGram(Token token1, Token token2)
         {
-            this.Token1 = token1;
-            this.Token2 = token2;
+            if (token1 == null)
+                throw new ArgumentNullException("token1");
+
+            if (token2 == null)
+                throw new ArgumentNullException("token2");
+
+            Token1 = token1;
+            Token2 = token2;
         }
         #endregion
 
@@ -27,7 +33,7 @@ namespace TextProcessingFunctions.Core.TextProcesser
             bool equals = false;
 
             if (otherTwoGram != null)
-                equals = this.Equals(otherTwoGram);
+                equals = Equals(otherTwoGram);
 
             return
                 equals;
@@ -37,15 +43,15 @@ namespace TextProcessingFunctions.Core.TextProcesser
         public override int GetHashCode()
         {
             return
-                this.Token1.GetHashCode() 
+                Token1.GetHashCode() 
                 +
-                this.Token2.GetHashCode();
+                Token2.GetHashCode();
         }
 
         public override string ToString()
         {
             return
-                this.Token1.Content + " " + this.Token2.Content;
+                Token1.Content + " " + Token2.Content;
         }
         #endregion
 
@@ -57,15 +63,15 @@ namespace TextProcessingFunctions.Core.TextProcesser
                 other != null
                 &&
                 (
-                    (this.Token1 == null && other.Token1 == null)
+                    (Token1 == null && other.Token1 == null)
                     ||
-                    (this.Token1 != null && this.Token1.Equals(other.Token1))
+                    (Token1 != null && Token1.Equals(other.Token1))
                 )
                 &&
                 (
-                    (this.Token2 == null && other.Token2 == null)
+                    (Token2 == null && other.Token2 == null)
                     ||
-                    (this.Token2 != null && this.Token2.Equals(other.Token2))
+                    (Token2 != null && Token2.Equals(other.Token2))
                 );
         }
 
